@@ -18,6 +18,10 @@
 				$scope.users.push(angular.copy(user));
 				delete $scope.user;
 			};
+			$scope.usersType = [
+				{level: 'Admin'},
+				{level: 'Common'},
+			];
 		});
 	</script>
 
@@ -30,16 +34,22 @@
 			<tr>
 				<th>Name</th>
 				<th>E-mail</th>
+				<th>Level</th>
 			</tr>
 			<tr ng-repeat="user in users">
 				<td>{{user.name}}</td>
 				<td>{{user.email}}</td>
+				<td>{{user.usersTypes.level}}</td>
 			</tr>
 		</table>
 		<hr>
+		{{user}}
 		<input class="form-control" type="text" placeholder="Name" ng-model="user.name">
 		<input class="form-control" type="text" placeholder="E-mail" ng-model="user.email">
-		<button class="btn btn-primary btn-block" ng-click="addUser(user)">Insert</button>
+		<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType">
+			<option value="">Select level</option>
+		</select>
+		<button class="btn btn-primary btn-block" ng-click="addUser(user)" ng-disabled="!user.name || !user.email">Insert</button>
 	</div>
 </body>
 </html>
