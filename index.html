@@ -8,14 +8,38 @@
 	<script>
 		angular.module("usersList", []);
 		angular.module("usersList").controller("usersListCtrl", function ($scope) {
-			$scope.message = "Users List";
+			$scope.app = "Users List";
+			$scope.users = [
+				{name: 'José', email: 'jose@exemple.com.br'},
+				{name: 'João', email: 'joao@exemple.com.br'},
+				{name: 'Mária', email: 'maria@exemple.com.br'},
+			];
+			$scope.addUser = function(user){
+				$scope.users.push(angular.copy(user));
+				delete $scope.user;
+			};
 		});
 	</script>
 
 </head>
 <body ng-controller="usersListCtrl">
 	<div class="jumbotron">
-		<h4>{{message}}</h4><!--  Outra forma de exibir - <span ng-bind="message"></span>  -->
+		<h4>{{app}}</h4>
+		<!--  Other form of display - <span ng-bind="message"></span>  -->
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>E-mail</th>
+			</tr>
+			<tr ng-repeat="user in users">
+				<td>{{user.name}}</td>
+				<td>{{user.email}}</td>
+			</tr>
+		</table>
+		<hr>
+		<input class="form-control" type="text" placeholder="Name" ng-model="user.name">
+		<input class="form-control" type="text" placeholder="E-mail" ng-model="user.email">
+		<button class="btn btn-primary btn-block" ng-click="addUser(user)">Insert</button>
 	</div>
 </body>
 </html>
