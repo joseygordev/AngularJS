@@ -1,0 +1,21 @@
+<html ng-app="usersList">
+<head>
+	<meta charset="UTF-8">
+	<title>Users List</title>
+	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="public/css/style.css">
+	<script src="public/js/angular.js"></script>
+	<script>
+		angular.module("usersList", []);
+		angular.module("usersList").controller("usersListCtrl", function ($scope) {
+			$scope.message = "Users List";
+		});
+	</script>
+
+</head>
+<body ng-controller="usersListCtrl">
+	<div class="jumbotron">
+		<h4>{{message}}</h4><!--  Outra forma de exibir - <span ng-bind="message"></span>  -->
+	</div>
+</body>
+</html>
