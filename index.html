@@ -10,9 +10,9 @@
 		angular.module("usersList").controller("usersListCtrl", function ($scope) {
 			$scope.app = "Users List";
 			$scope.users = [
-				{name: 'José', email: 'jose@exemple.com.br'},
-				{name: 'João', email: 'joao@exemple.com.br'},
-				{name: 'Mária', email: 'maria@exemple.com.br'},
+				{name: 'José', email: 'jose@exemple.com.br', thumb: 'red'},
+				{name: 'João', email: 'joao@exemple.com.br', thumb: 'yellow'},
+				{name: 'Mária', email: 'maria@exemple.com.br', thumb: 'green'},
 			];
 			$scope.addUser = function(user){
 				$scope.users.push(angular.copy(user));
@@ -22,6 +22,16 @@
 				{level: 'Admin'},
 				{level: 'Common'},
 			];
+			$scope.deleteUser = function(users){
+				$scope.users = users.filter(function(user){
+					if (!user.selected) return user;
+				});
+			};
+			$scope.isUserSelected = function(users){
+				return users.some(function(user){
+					return user.selected;
+				});
+			};
 		});
 	</script>
 
@@ -30,26 +40,30 @@
 	<div class="jumbotron">
 		<h4>{{app}}</h4>
 		<!--  Other form of display - <span ng-bind="message"></span>  -->
-		<table class="table table-striped">
+		<table ng-show="users.length > 0" class="table">
 			<tr>
+				<th></th>
 				<th>Name</th>
 				<th>E-mail</th>
 				<th>Level</th>
+				<th>Thumb</th>
 			</tr>
-			<tr ng-repeat="user in users">
+			<tr ng-class="{'selected bold': user.selected}" ng-repeat="user in users">
+				<td><input type="checkbox" ng-model="user.selected"></td>
 				<td>{{user.name}}</td>
 				<td>{{user.email}}</td>
 				<td>{{user.usersTypes.level}}</td>
+				<td><div style="width: 20px; height: 20px;" ng-style="{'background-color': user.thumb}"></div></td>
 			</tr>
 		</table>
 		<hr>
-		{{user}}
 		<input class="form-control" type="text" placeholder="Name" ng-model="user.name">
 		<input class="form-control" type="text" placeholder="E-mail" ng-model="user.email">
 		<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType">
 			<option value="">Select level</option>
 		</select>
-		<button class="btn btn-primary btn-block" ng-click="addUser(user)" ng-disabled="!user.name || !user.email">Insert</button>
+		<button class="btn btn-primary btn-block" ng-click="addUser(user)" ng-disabled="!user.name || !user.email">Insert user</button>
+		<button class="btn btn-danger btn-block" ng-click="deleteUser(users)" ng-if="isUserSelected(users)">Delete user</button>
 	</div>
 </body>
 </html>

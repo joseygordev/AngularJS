@@ -6,3 +6,5 @@
 	padding: 	15px;
 }
 .form-control{ margin-bottom: 5px; }
+.bold{ font-weight: bold; }
+.selected{ background-color: yellow; }
