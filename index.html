@@ -5,8 +5,9 @@
 	<link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="public/css/style.css">
 	<script src="public/js/angular.js"></script>
+	<script src="public/js/angular-messages.min.js"></script>
 	<script>
-		angular.module("usersList", []);
+		angular.module("usersList", ['ngMessages']);
 		angular.module("usersList").controller("usersListCtrl", function ($scope) {
 			$scope.app = "Users List";
 			$scope.users = [
@@ -17,6 +18,7 @@
 			$scope.addUser = function(user){
 				$scope.users.push(angular.copy(user));
 				delete $scope.user;
+				$scope.userForm.$setPristine();
 			};
 			$scope.usersType = [
 				{level: 'Admin'},
@@ -57,11 +59,26 @@
 			</tr>
 		</table>
 		<hr>
-		<input class="form-control" type="text" placeholder="Name" ng-model="user.name">
-		<input class="form-control" type="text" placeholder="E-mail" ng-model="user.email">
-		<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType">
-			<option value="">Select level</option>
-		</select>
+		<form name="userForm">
+			<input class="form-control" type="text" name="name" ng-required="true" ng-minlength="4" ng-model="user.name" placeholder="Name">
+			<input class="form-control" type="text" name="email" ng-required="true" ng-model="user.email" placeholder="E-mail">
+			<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType">
+				<option value="">Select level</option>
+			</select>
+		</form>
+		<div ng-show="userForm.name.$dirty" ng-messages="userForm.name.$error">
+			<div ng-message="required" class="alert alert-danger">
+				Fill in the field name!
+			</div>
+			<div ng-message="minlength" class="alert alert-danger">
+				Min length of 4 characters.
+			</div>
+		</div>
+		<div ng-show="userForm.email.$dirty" ng-messages="userForm.email.$error">
+			<div ng-message="required" class="alert alert-danger">
+				Fill in the field email!
+			</div>
+		</div>
 		<button class="btn btn-primary btn-block" ng-click="addUser(user)" ng-disabled="!user.name || !user.email">Insert user</button>
 		<button class="btn btn-danger btn-block" ng-click="deleteUser(users)" ng-if="isUserSelected(users)">Delete user</button>
 	</div>
