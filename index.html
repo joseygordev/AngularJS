@@ -11,9 +11,9 @@
 		angular.module("usersList").controller("usersListCtrl", function ($scope) {
 			$scope.app = "Users List";
 			$scope.users = [
-				{name: 'José', email: 'jose@exemple.com.br', thumb: 'red'},
-				{name: 'João', email: 'joao@exemple.com.br', thumb: 'yellow'},
-				{name: 'Mária', email: 'maria@exemple.com.br', thumb: 'green'},
+				{name: 'José', email: 'jose@exemple.com.br', thumb: 'red', date: new Date()},
+				{name: 'João', email: 'joao@exemple.com.br', thumb: 'yellow', date: new Date()},
+				{name: 'Mária', email: 'maria@exemple.com.br', thumb: 'green', date: new Date()},
 			];
 			$scope.addUser = function(user){
 				$scope.users.push(angular.copy(user));
@@ -34,6 +34,10 @@
 					return user.selected;
 				});
 			};
+			$scope.orderByFor = function(fieldOrder){
+				$scope.fieldOrder = fieldOrder;
+				$scope.directionOrder = !$scope.directionOrder;
+			};
 		});
 	</script>
 
@@ -42,27 +46,31 @@
 	<div class="jumbotron">
 		<h4>{{app}}</h4>
 		<!--  Other form of display - <span ng-bind="message"></span>  -->
+		<input class="form-control" type="text" placeholder class="form-control"="Search" ng-model="searchUser">
 		<table ng-show="users.length > 0" class="table">
 			<tr>
 				<th></th>
-				<th>Name</th>
+				<th><a href="" ng-click="orderByFor()">Name</a></th>
 				<th>E-mail</th>
 				<th>Level</th>
-				<th>Thumb</th>
+				<!-- <th>Thumb</th> -->
+				<!-- <th>Data</th> -->
 			</tr>
-			<tr ng-class="{'selected bold': user.selected}" ng-repeat="user in users">
+			<tr ng-class="{'selected bold': user.selected}" ng-repeat="user in users | filter: searchUser | orderBy: fieldOrder: directionOrder">
 				<td><input type="checkbox" ng-model="user.selected"></td>
 				<td>{{user.name}}</td>
-				<td>{{user.email}}</td>
+				<td>{{user.email  | lowercase}}</td>
 				<td>{{user.usersTypes.level}}</td>
-				<td><div style="width: 20px; height: 20px;" ng-style="{'background-color': user.thumb}"></div></td>
+				<!-- <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': user.thumb}"></div></td> -->
+				<!-- Exemple filter date  -->
+				<!-- <td>{{user.date | date: 'dd/MM/y'}}</td> -->
 			</tr>
 		</table>
 		<hr>
 		<form name="userForm">
 			<input class="form-control" type="text" name="name" ng-required="true" ng-minlength="4" ng-model="user.name" placeholder="Name">
 			<input class="form-control" type="text" name="email" ng-required="true" ng-model="user.email" placeholder="E-mail">
-			<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType">
+			<select class="form-control" ng-model="user.usersTypes" ng-options="usersTypes.level for usersTypes in usersType | orderBy: '+level'">
 				<option value="">Select level</option>
 			</select>
 		</form>
